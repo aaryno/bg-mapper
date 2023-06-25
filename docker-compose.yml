@@ -1,0 +1,45 @@
+version: "3.8"
+
+volumes:
+  web_data:
+    external: true
+  postgres_data:
+    external: true
+  geoserver_data:
+    external: true
+
+services:
+
+  postgis:
+    image: "mdillon/postgis"
+    hostname: postgis
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  geoserver:
+    image: "kartoza/geoserver"
+    ports:
+      - "8080:8080"
+    volumes:
+      - geoserver_data:/opt/geoserver/data_dir
+    environment:
+      - GEOSERVER_ADMIN_USER=admin
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+      # - HTTP_PROXY_NAME=${CODESPACE_NAME}-8080.preview.app.github.dev
+      - HTTP_SCHEME=https
+      # - MAXIMUM_MEMORY=756M
+      # - INITIAL_MEMORY=128M
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+networks:
+  default:
+    name: bgweb

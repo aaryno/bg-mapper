@@ -9,3 +9,5 @@ docker-prepare: ## Create data directories for
 	mkdir -p $(data_dir)/web_data
 	scripts/docker-setup.sh $(data_dir)
 	
+dev-up:
+	cd api && uvicorn main:app --reload

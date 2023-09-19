@@ -1,17 +1,24 @@
 # uvicorn main:app --reload
+
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi.responses import FileResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import StreamingResponse
+from titiler.extensions import cogViewerExtension
 import databases
 import sqlalchemy
 from pydantic import BaseModel
 import datetime
+import os
 
+from titiler.core.factory import TilerFactory
+from titiler.core.errors import DEFAULT_STATUS_CODES, add_exception_handlers
 
-# DATABASE_URL = "sqlite:///./test.db"
 DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/estimates"
 
 database = databases.Database(DATABASE_URL)
-
-app = FastAPI()
 
 engine = sqlalchemy.create_engine(DATABASE_URL)  # Access the DB Engine
 
@@ -20,12 +27,15 @@ metadata = sqlalchemy.MetaData(engine)
 estimates = sqlalchemy.Table(
     "estimates",
     metadata,
-    sqlalchemy.Column("estimate_id", sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column("if", sqlalchemy.Integer, primary_key=True),
     sqlalchemy.Column("cell_id", sqlalchemy.Integer),
     sqlalchemy.Column("user_id", sqlalchemy.Integer),
     sqlalchemy.Column("estimate", sqlalchemy.Integer),
     sqlalchemy.Column(
         "observation_time", sqlalchemy.DateTime, default=datetime.datetime.utcnow
+    ),
+    sqlalchemy.UniqueConstraint(
+        "cell_id", "user_id", name="unique_estimate_cell_id_user_id"
     ),
     sqlalchemy.Column("notes", sqlalchemy.String),
 )
@@ -39,6 +49,25 @@ class Estimate(BaseModel):
     estimate: int
     observation_time: datetime.datetime
     notes: str
+
+
+templates = Jinja2Templates(directory="templates")
+
+app = FastAPI()
+
+cog = TilerFactory(
+    extensions=[
+        cogViewerExtension()  # the cogeoExtension will add a rio-cogeo /validate endpoint
+    ]
+)
+app.include_router(cog.router)
+app.include_router(cog.router, prefix="/cog", tags=["Cloud-optimized Geotiff"])
+add_exception_handlers(app, DEFAULT_STATUS_CODES)
+
+
+@app.get("/")
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.on_event("startup")

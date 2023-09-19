@@ -18,28 +18,43 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  geoserver:
-    image: "kartoza/geoserver"
+  nginx:
+    image: nginx
+    hostname: nginx
     ports:
-      - "8080:8080"
+      - "8082:80"
     volumes:
-      - geoserver_data:/opt/geoserver/data_dir
-    environment:
-      - GEOSERVER_ADMIN_USER=admin
-      - GEOSERVER_ADMIN_PASSWORD=geoserver
-      # - HTTP_PROXY_NAME=${CODESPACE_NAME}-8080.preview.app.github.dev
-      - HTTP_SCHEME=https
-      # - MAXIMUM_MEMORY=756M
-      # - INITIAL_MEMORY=128M
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 8G
-        reservations:
-          cpus: '1'
-          memory: 1G
+      - /Users/aaryn/personal/asdm/data/imagery/:/usr/share/nginx/html
+  # geoserver:
+  #   image: "docker.osgeo.org/geoserver:2.23.1"
+  #   hostname: geoserver
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - geoserver_data:/opt/geoserver/data_dir
+  #     - /Users/aaryn/personal/asdm/data/imagery:/imagery
+  #   environment:
+  #     # - GEOSERVER_ADMIN_USER=admin
+  #     # - GEOSERVER_ADMIN_PASSWORD=geoserver
+  #     # # - HTTP_PROXY_NAME=${CODESPACE_NAME}-8080.preview.app.github.dev
+  #     # - HTTP_SCHEME=http
+  #     # - COMMUNITY_EXTENSIONS=jp2k-plugin
+  #     # - ROOT_WEBAPP_REDIRECT=true
+  #     # - MAXIMUM_MEMORY=756M
+  #     # - INITIAL_MEMORY=128M
+  #     - INSTALL_EXTENSIONS=true
+  #     - STABLE_EXTENSIONS=pyramid
+  #     - SKIP_DEMO_DATA=true
+  #     - CORS_ENABLED=true
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '4'
+  #         memory: 8G
+  #       reservations:
+  #         cpus: '1'
+  #         memory: 1G
 
 networks:
   default:
-    name: bgweb
+    name: asdm

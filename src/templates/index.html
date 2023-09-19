@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>Getting FUNKY with Leaflet</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+</head>
+
+<body>
+  <h1>Hello there!</h1>
+  <div id="map" style="width: 1200px; height: 800px;"></div>
+  <script>
+    var estimating = false;
+    var latSampleSize = 0.0001;
+    var lngSampleSize = 0.0001;
+    var currentLatLng;
+    var activePolygon;
+
+    var map = new L.Map('map', {
+      // center: new L.LatLng(32.215, -111.005),
+      center: new L.LatLng(32.3527293, -110.8820715),
+      zoom: 15,
+      attributionControl: true,
+      zoomControl: false,
+      tap: false,
+      touchZoom: false,
+
+    }
+    );
+    // var tileUrl = "https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=JTquoSV9EShVtqRcFUdv"
+    var tileUrl = "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fpusch_cog_march2023_skysatscene_pansharpened_udm2%2Fcomposite_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2"
+    // 'http://127.0.0.1:8000/cog/tiles/WebMercatorQuad/{z}/{x}/{y}@{scale}?url=https%3A%2F%2Fstorage.googleapis.com%2Fsample-cogs%2F20210514_145807_70_2455_3B_AnalyticMS.tif'
+
+    var attrib = "Planet Labs Imagery"
+    var tileLayer = new L.TileLayer(tileUrl, { minZoom: 3, maxZoom: 26, attribution: attrib });
+
+    map.addLayer(tileLayer)
+
+    var popup = L.popup();
+
+    function popupMessageAt(latlng, message) {
+      popup
+        .setLatLng(latlng)
+        .setContent(message)
+        .openOn(map);
+    }
+
+    function drawEstimatePolygon() {
+      if (activePolygon != null) {
+        activePolygon.remove()
+      }
+      activePolygon = L.polygon([
+        [currentLatLng.lat - latSampleSize / 2, currentLatLng.lng - lngSampleSize / 2],
+        [currentLatLng.lat + latSampleSize / 2, currentLatLng.lng - lngSampleSize / 2],
+        [currentLatLng.lat + latSampleSize / 2, currentLatLng.lng + lngSampleSize / 2],
+        [currentLatLng.lat - latSampleSize / 2, currentLatLng.lng + lngSampleSize / 2]
+      ], {
+        fillOpacity: 0.0
+      }).addTo(map);
+    }
+
+    function toggleEstimating(e) {
+      estimating = true
+      currentLatLng = e.latlng;
+      drawEstimatePolygon()
+    }
+
+    function navigateNorth() {
+      currentLatLng.lat = currentLatLng.lat + latSampleSize
+      drawEstimatePolygon()
+    }
+
+    function navigateSouth() {
+      currentLatLng.lat = currentLatLng.lat - latSampleSize
+      drawEstimatePolygon()
+    }
+
+    function navigateWest() {
+      currentLatLng.lng = currentLatLng.lng - lngSampleSize
+      drawEstimatePolygon()
+    }
+
+    function navigateEast() {
+      currentLatLng.lng = currentLatLng.lng + lngSampleSize
+      drawEstimatePolygon()
+    }
+
+    document.onkeyup = function (e) {
+      console.log('pressed: ' + e.keyCode)
+      if (estimating) {
+        if (e.keyCode == '38') {
+          navigateNorth();
+        } else if (e.keyCode == '40') {
+          navigateSouth();
+        } else if (e.keyCode == '39') {
+          navigateEast();
+        } else if (e.keyCode == '37') {
+          navigateWest();
+        } else if (e.keyCode == '48') {
+          activePolygon.setStyle({
+            color: '#ffffff',
+            fillColor: '#ffffff',
+            opacity: 0.5,
+            fillOpacity: 0.5
+          });
+        } else if (e.keyCode == '49') {
+          activePolygon.setStyle({
+            color: '#fef0b1',
+            fillColor: '#fef0b1',
+            opacity: 0.5,
+            fillOpacity: 0.5
+          });
+        } else if (e.keyCode == '50') {
+          activePolygon.setStyle({
+            color: '#ffefa3',
+            fillColor: '#ffce03',
+            opacity: 0.5,
+            fillOpacity: 0.5
+          });
+        } else if (e.keyCode == '51') {
+          activePolygon.setStyle({
+            color: '#fe9a01',
+            fillColor: '#fd9a01',
+            opacity: 0.5,
+            fillOpacity: 0.5
+          });
+        } else if (e.keyCode == '52') {
+          activePolygon.setStyle({
+            color: '#ff2c05',
+            fillColor: '#ff2c05',
+            opacity: 0.5,
+            fillOpacity: 0.5
+          });
+        } else if (e.keyCode == '53') {
+          activePolygon.setStyle({
+            color: '#ab0000',
+            fillColor: '#ab0000',
+            opacity: 0.5,
+            fillOpacity: 0.5
+          });
+        }
+      }
+    };
+
+    map.on('click', toggleEstimating);
+  </script>
+</body>
+
+</html>

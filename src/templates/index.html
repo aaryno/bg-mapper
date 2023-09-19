@@ -39,14 +39,43 @@
 
     }
     );
-    // var tileUrl = "https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=JTquoSV9EShVtqRcFUdv"
-    var tileUrl = "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fpusch_cog_march2023_skysatscene_pansharpened_udm2%2Fcomposite_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2"
-    // 'http://127.0.0.1:8000/cog/tiles/WebMercatorQuad/{z}/{x}/{y}@{scale}?url=https%3A%2F%2Fstorage.googleapis.com%2Fsample-cogs%2F20210514_145807_70_2455_3B_AnalyticMS.tif'
 
+    var tileUrls = [
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fpusch_cog_march2023_skysatscene_pansharpened_udm2%2Fcomposite_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcampbell_april_2022_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20220402_211256_ssc6_u0003_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20220402_211256_ssc6_u0003_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180612_175826_ssc4_u0004_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180612_175826_ssc4_u0005_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180621_180047_ssc4_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180621_180047_ssc4_u0002_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180624_205315_ssc8_u0007_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180624_205315_ssc8_u0008_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180630_210102_ssc10_u0006_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20180630_210102_ssc10_u0007_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20200617_175118_ssc2_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20200617_204853_ssc10_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20200617_204853_ssc10_u0002_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20201122_183822_ss01_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20211027_205122_ssc11_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20211029_153726_ssc14_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20211029_153757_ssc14_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20211029_213905_ssc19_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2",
+      "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20220208_173202_ssc2_u0001_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2"
+    ]
     var attrib = "Planet Labs Imagery"
-    var tileLayer = new L.TileLayer(tileUrl, { minZoom: 3, maxZoom: 26, attribution: attrib });
+    for (i = 0; i < tileUrls.length; i++) {
+      var tileLayer = new L.TileLayer(tileUrls[i], { minZoom: 3, maxZoom: 26, attribution: attrib });
+      map.addLayer(tileLayer)
+    }
 
-    map.addLayer(tileLayer)
+
+    // tileUrl2 = "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcatalinas_2018_to_2020_skysatcollect_pansharpened_udm22FSkySatCollect%2Fcomposite_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2"
+    // tileLayer2 = new L.TileLayer(tileUrl2, { minZoom: 3, maxZoom: 26, attribution: attrib });
+    // map.addLayer(tileLayer2)
+
+    // tileUrl3 = "http://127.0.0.1:8000/tiles/WebMercatorQuad/{z}/{x}/{y}@1x?url=http%3A%2F%2F127.0.0.1%3A8082%2Fcampbell_april_2022_skysatcollect_pansharpened_udm2%2FSkySatCollect%2F20220402_211256_ssc6_u0003_pansharpened_clip_file_format.tif&rescale=0%2C600&bidx=4&bidx=3&bidx=2"
+    // tileLayer3 = new L.TileLayer(tileUrl3, { minZoom: 3, maxZoom: 26, attribution: attrib });
+    // map.addLayer(tileLayer3)
 
     var popup = L.popup();
 
